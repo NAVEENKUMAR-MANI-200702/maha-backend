@@ -1,6 +1,8 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import mongoose from 'mongoose';
+import { connectDatabase } from './config/database';
 
 // Load environment variables
 dotenv.config();
@@ -17,6 +19,7 @@ app.get('/health', (_req: Request, res: Response) => {
   res.status(200).json({
     status: 'UP',
     service: 'maha-backend',
+    database: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected',
     timestamp: new Date().toISOString(),
   });
 });
@@ -29,8 +32,14 @@ app.get('/', (_req: Request, res: Response) => {
   });
 });
 
-// Start listening
-app.listen(PORT, () => {
-  console.log(`🚀 Maha Backend is running on http://localhost:${PORT}`);
-  console.log(`🩺 Health check available at http://localhost:${PORT}/health`);
-});
+// Start listening after connecting to database
+const startServer = async () => {
+  await connectDatabase();
+
+  app.listen(PORT, () => {
+    console.log(`🚀 Maha Backend is running on http://localhost:${PORT}`);
+    console.log(`🩺 Health check available at http://localhost:${PORT}/health`);
+  });
+};
+
+startServer();
