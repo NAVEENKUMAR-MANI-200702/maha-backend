@@ -75,3 +75,4 @@ const ProductSchema = new Schema<IProduct>(
 ProductSchema.index({ isDeleted: 1, createdAt: -1 });
 
 export const Product = mongoose.model<IProduct>('Product', ProductSchema);
+

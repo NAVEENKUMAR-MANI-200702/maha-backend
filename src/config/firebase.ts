@@ -42,3 +42,4 @@ export const getAuth = () => {
   if (!admin.apps.length) initFirebase();
   return admin.auth();
 };
+

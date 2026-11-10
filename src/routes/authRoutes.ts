@@ -67,3 +67,4 @@ router.post('/sync', async (req: AuthRequest, res: Response) => {
 });
 
 export default router;
+
